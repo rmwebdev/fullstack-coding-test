@@ -1,0 +1,16 @@
+function find(a, b) {
+  const a = new Set(a);
+  const b = new Set(b);
+  const intersection = new Set([...a].filter(x => b.has(x)));
+  return Array.from(intersection);
+}
+
+const A = [1, 2, 3, 4, 5];
+const B = [2, 3, 4, 5, 6];
+const intersection = find(A, B);
+console.log(intersection);
+
+const C = [9, 8, 3, 4, 5];
+const D = [2, 7, 4, 9, 1, 0];
+const intersection2 = find(C, D);
+console.log(intersection2);

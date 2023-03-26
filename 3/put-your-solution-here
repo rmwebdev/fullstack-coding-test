@@ -1,0 +1,61 @@
+interface OrganizationNode {
+  label: number;
+  parent: number | null;
+}
+
+interface Tree {
+  label: number;
+  children: Tree[];
+}
+
+function generateTree(arr: OrganizationNode[]): Tree {
+  const map = new Map<number, Tree>();
+  let root: Tree;
+
+  arr.forEach(node => {
+    map.set(node.label, { label: node.label, children: [] });
+  });
+
+  arr.forEach(node => {
+    const child = map.get(node.label);
+    if (node.parent === null) {
+      root = child;
+    } else {
+      const parent = map.get(node.parent);
+      parent.children.push(child);
+    }
+  });
+
+  return root;
+}
+
+function flattenTree(tree: Tree): OrganizationNode[] {
+  const result: OrganizationNode[] = [];
+
+  const traverse = (node: Tree, parent: number | null) => {
+    result.push({ label: node.label, parent });
+    node.children.forEach(child => traverse(child, node.label));
+  };
+
+  traverse(tree, null);
+
+  return result;
+}
+
+const arr = [
+  { "label": 1, "parent": null },
+  { "label": 2, "parent": 1 },
+  { "label": 3, "parent": 2 },
+  { "label": 4, "parent": 2 },
+  { "label": 5, "parent": 1 },
+  { "label": 6, "parent": 1 },
+  { "label": 7, "parent": 6 },
+  { "label": 8, "parent": 6 },
+  { "label": 9, "parent": 8 }
+];
+
+const tree = generateTree(arr);
+console.log(tree);
+
+const flatArr = flattenTree(tree);
+console.log(flatArr);
